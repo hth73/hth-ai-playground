@@ -6,7 +6,7 @@
 
 ### Table of Contents
 
-* [Retrieval Augmented Generation (RAG) Chatbot](01-rag/README.md)
+* [Retrieval Augmented Generation (RAG) Pipeline - Funktionsweise](01-rag/README.md)
 
 ---
 

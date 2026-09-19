@@ -1,4 +1,4 @@
-# Retrieval Augmented Generation (RAG) Funktionsweise
+# Retrieval Augmented Generation (RAG) Pipeline -  Funktionsweise
 
 <p><img src="../images/rag.jpg" width="50%" height="50%" /></p>
 
@@ -39,7 +39,7 @@ Antwort
 
 ## 1. Dokumente
 
-Über die Streamlit WebGUI können PDF- und TXT-Dateien hochgeladen werden.
+Über die Streamlit WebGUI können PDF und TXT Dateien hochgeladen werden.
 
 - PDF → Text Extraction mit `pdfplumber`
 - TXT → UTF-8 Text
@@ -88,6 +88,13 @@ wird die Cosine Similarity im Python-Code manuell berechnet.
 
 Damit kann nachvollzogen werden, wie semantische Ähnlichkeit
 zwischen Texten mathematisch bestimmt wird.
+
+**Embedding Vektoren in einem 3D Raum (vereinfachte Darstellung)**
+<p><img src="../images/embedding_vektoren_cosine_similarity.jpg" width="50%" height="50%" /></p>
+
+**Dimensionen (vereinfachte Darstellung)**
+<p><img src="../images/dimensionale.jpg" width="50%" height="50%" /></p>
+
 
 ## 6. Manual Retriever
 
