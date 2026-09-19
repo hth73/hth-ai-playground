@@ -277,7 +277,7 @@ st.header("Manual Retriever", divider="grey")
 
 if all_chunks:
     user_question = st.text_input(
-        "Was möchtest du wissen?:"
+        "Frage Manual Retriever (Frage-Embedding wird mit Embeddings im Arbeitsspeicher verglichen):"
     )
 
     if user_question:
@@ -355,6 +355,20 @@ qdrant_client = QdrantClient(
     host="localhost",
     port=6333
 )
+
+try:
+    qdrant_client.get_collections()
+    qdrant_available = True
+except Exception:
+    qdrant_available = False
+
+if not qdrant_available:
+    st.error(
+        "Qdrant Vector Datanbank ist nicht erreichbar. "
+        "Bitte den Docker Container starten."
+    )
+    st.stop()
+
 QDRANT_COLLECTION = "rag_documents"
 
 # --------------------------------------------------
@@ -425,7 +439,7 @@ st.write(points[0])
 st.header("Qdrant Retriever", divider="grey")
 if all_chunks:
     user_question_qdrant = st.text_input(
-        "Was möchtest du wissen? (Qdrant):"
+        "Frage Qdrant Retriever (Frage-Embedding wird mit gespeicherten Embeddings in DB verglichen):"
     )
 
     if user_question_qdrant:
@@ -476,7 +490,7 @@ st.header("RAG Pipeline", divider="grey")
 st.subheader("10.1 Retrieval")
 
 rag_question = st.text_input(
-    "Frage für die RAG Pipeline:"
+    "Frage RAG Pipeline (Frage-Embedding wird mit gespeicherten Embeddings in DB verglichen und die gefundenen Chunks als Context an das LLM übergeben):"
 )
 
 if rag_question:
@@ -532,27 +546,32 @@ if rag_question:
 # --------------------------------------------------
 st.subheader("10.3 Prompt")
 
-system_prompt = (
-    "Du bist ein hilfreicher Assistent, der Fragen "
-    "mithilfe des bereitgestellten Kontexts beantwortet.\n\n"
-    "Richtlinien:\n"
-    "1. Gib vollständige und gut verständliche Antworten auf Grundlage des folgenden Kontexts.\n"
-    "2. Berücksichtige relevante Details, Zahlen und Erklärungen.\n"
-    "3. Verwende ausschließlich Informationen aus dem bereitgestellten Kontext.\n"
-    "4. Verwende kein Wissen außerhalb des bereitgestellten Kontexts.\n"
-    "5. Wenn die benötigte Information nicht im Kontext enthalten ist, "
-    "teile dies höflich mit.\n\n"
-    "Kontext:\n"
-    f"{context}"
-)
+if rag_question and rag_search_result.points:
 
-user_prompt = rag_question
-st.write("System Prompt:")
+    system_prompt = (
+        "Du bist ein hilfreicher Assistent, der Fragen "
+        "mithilfe des bereitgestellten Kontexts beantwortet.\n\n"
+        "Richtlinien:\n"
+        "1. Gib vollständige und gut verständliche Antworten auf Grundlage des folgenden Kontexts.\n"
+        "2. Berücksichtige relevante Details, Zahlen und Erklärungen.\n"
+        "3. Verwende ausschließlich Informationen aus dem bereitgestellten Kontext.\n"
+        "4. Verwende kein Wissen außerhalb des bereitgestellten Kontexts.\n"
+        "5. Wenn die benötigte Information nicht im Kontext enthalten ist, "
+        "teile dies höflich mit.\n\n"
+        "Kontext:\n"
+        f"{context}"
+    )
 
-st.code(system_prompt)
-st.write("User Prompt:")
+    user_prompt = rag_question
 
-st.code(user_prompt)
+    st.write("System Prompt:")
+    st.code(system_prompt)
+
+    st.write("User Prompt:")
+    st.code(user_prompt)
+
+else:
+    st.info("Bitte zuerst ein Dokument hochladen und eine Frage eingeben.")
 
 # --------------------------------------------------
 # 10.4 LLM
