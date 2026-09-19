@@ -11,30 +11,38 @@ nachzuvollziehen.
 Der Aufbau wurde bewusst nicht als kompakte LangChain-Chain umgesetzt,
 sondern die einzelnen Prozesse werden sichtbar dargestellt.
 
-## RAG Pipeline
+## Gesamtübersicht der RAG Pipeline
 
 ```text
-Dokumente
-    ↓
-Text Extraction
-    ↓
-Chunks
-    ↓
-Metadaten
-    ↓
-Embeddings
-    ↓
-Qdrant Vector Database
-    ↓
-Retrieval
-    ↓
-Context
-    ↓
-Prompt
-    ↓
-LLM
-    ↓
-Antwort
+       WEB GUI
+          ↓
+ ┌─────────────────┐
+ │    PDF / TXT    │
+ └────────┬────────┘
+          ↓
+   Text Extraction
+          ↓
+       Chunking
+          ↓
+      Metadata
+          ↓
+     Embeddings
+   1536 Dimensionen
+          ↓
+ ┌─────────────────┐
+ │     Qdrant      │
+ │  Vector Store   │
+ └────────┬────────┘
+          ↓
+      Retrieval
+          ↓
+       Context
+          ↓
+        Prompt
+          ↓
+         LLM
+          ↓
+       Antwort
 ```
 
 ## 1. Dokumente
@@ -94,7 +102,6 @@ zwischen Texten mathematisch bestimmt wird.
 
 **Dimensionen (vereinfachte Darstellung)**
 <p><img src="../images/dimensionale.jpg" width="50%" height="50%" /></p>
-
 
 ## 6. Manual Retriever
 
@@ -197,39 +204,6 @@ Der erzeugte Prompt wird mit `ChatOpenAI` an ein OpenAI LLM
 
 Das LLM erzeugt daraus die finale Antwort.
 
-## Gesamtablauf
-
-```text
-                    RAG LAB
-                       │
-              ┌────────▼────────┐
-              │ PDF / TXT       │
-              └────────┬────────┘
-                       ↓
-                Text Extraction
-                       ↓
-                    Chunking
-                       ↓
-                   Metadata
-                       ↓
-                  Embeddings
-                1536 Dimensionen
-                       ↓
-              ┌─────────────────┐
-              │     Qdrant      │
-              │  Vector Store   │
-              └────────┬────────┘
-                       ↓
-                   Retrieval
-                       ↓
-                    Context
-                       ↓
-                     Prompt
-                       ↓
-                      LLM
-                       ↓
-                    Antwort
-```
 
 ## Ziel des Projekts
 
