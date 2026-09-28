@@ -7,7 +7,8 @@
 ### Table of Contents
 
 * [Retrieval Augmented Generation (RAG) Pipeline - Funktionsweise](01-rag/README.md)
-* [Github Copilot - Multi-Cloud Terraform & Terragrunt](02-copilot/README.md)
+* [RAG Chatbot](02-rag-chatbot/README.md)
+* [Github Copilot - Multi-Cloud Terraform & Terragrunt](03-copilot/README.md)
 
 ---
 

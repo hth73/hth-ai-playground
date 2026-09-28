@@ -1,4 +1,4 @@
-# 02 - Copilot: Multi-Cloud Terraform & Terragrunt
+# Github Copilot: Multi-Cloud Terraform & Terragrunt
 
 <p><img src="../images/terragrunt_multicloud.jpg" width="50%" height="50%" /></p>
 
