@@ -28,7 +28,7 @@ st.caption(
 # Application Tabs
 # --------------------------------------------------
 chatbot_tab, debug_tab = st.tabs(
-    ["💬 Chatbot", "🔍 Debug Chatbot"]
+    ["💬 Chatbot", "🔍 Chatbot Debug"]
 )
 
 # --------------------------------------------------

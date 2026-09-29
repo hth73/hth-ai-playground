@@ -1,0 +1,35 @@
+# --------------------------------------------------
+# Ignore all .log files
+# --------------------------------------------------
+*.log
+
+# --------------------------------------------------
+# Environment variables
+# --------------------------------------------------
+.env
+
+# --------------------------------------------------
+# Persistent Data
+# --------------------------------------------------
+# Ignore all contents
+data/documents/*
+data/ollama/*
+data/qdrant/*
+data/metadata.db
+
+# Keep placeholder files
+!data/documents/.placeholder
+!data/ollama/.placeholder
+!data/qdrant/.placeholder
+
+# --------------------------------------------------
+# Ignore the virtual environment directory
+# --------------------------------------------------
+.venv/
+*.egg-info/
+
+# --------------------------------------------------
+# Ignore Python cache files
+# --------------------------------------------------
+__pycache__/
+*.py[cod]

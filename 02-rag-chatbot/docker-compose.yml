@@ -1,0 +1,34 @@
+networks:
+  homenet:
+    name: homenet
+    driver: bridge
+
+services:
+  # --------------------------------------------------
+  # Qdrant - Vector Database
+  # --------------------------------------------------
+  qdrant:
+    image: docker.io/qdrant/qdrant:v1.19
+    container_name: qdrant
+    restart: always
+    networks:
+      - homenet
+    ports:
+      - "127.0.0.1:6333:6333"
+      - "127.0.0.1:6334:6334"
+    volumes:
+      - "./data/qdrant:/qdrant/storage"
+    
+  # --------------------------------------------------
+  # Ollama - Local LLM
+  # --------------------------------------------------
+  ollama:
+    image: docker.io/ollama/ollama:0.35.0
+    container_name: ollama
+    restart: always
+    networks:
+      - homenet
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - "./data/ollama:/root/.ollama"

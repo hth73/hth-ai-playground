@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "02-rag-chatbot"
+version = "1.0.0"
+description = "Local RAG chatbot for document-based question answering, powered by Ollama, Qdrant, and Streamlit."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+
+authors = [
+  { name = "Helmut Thurnhofer" }
+]
+
+[tool.setuptools]
+package-dir = {"" = "app"}
+
+[tool.setuptools.packages.find]
+where = ["app"]
+
+[tool.pytest.ini_options]
+pythonpath = ["app"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.pyright]
+extraPaths = ["app"]
+
+[project.urls]
+Homepage = "https://github.com/hth73/hth-ai-playground/tree/main/02-rag-chatbot"
+Repository = "https://github.com/hth73/hth-ai-playground/tree/main/02-rag-chatbot"

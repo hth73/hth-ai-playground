@@ -1,0 +1,62 @@
+docker compose up -d                        
+# [+] up 2/2
+#  ✔ Container qdrant Running                                                                                                                                                               0.0s
+#  ✔ Container ollama Running
+
+docker ps -a
+CONTAINER ID   IMAGE                  COMMAND               CREATED       STATUS       PORTS                                NAMES
+599fed1da988   ollama/ollama:0.35.0   "/bin/ollama serve"   9 hours ago   Up 9 hours   127.0.0.1:11434->11434/tcp           ollama
+cc0451efb31f   qdrant/qdrant:v1.19    "./entrypoint.sh"     9 hours ago   Up 9 hours   127.0.0.1:6333-6334->6333-6334/tcp   qdrant
+
+curl http://localhost:6333
+{"title":"qdrant - vector search engine","version":"1.19.1","commit":"6ab21cac18ebb6f4ae29102c7f8f5cc11affd5de"}%
+
+curl http://localhost:11434
+Ollama is running%
+
+# Chat-Modell: Qwen3 1.7B download
+docker exec -it ollama ollama pull qwen3:1.7b
+
+tree -L 2 data/ollama
+data/ollama
+├── cache
+│   └── model-recommendations.json
+├── models
+│   ├── blobs
+│   ├── manifests
+│   └── metadata
+├── history
+├── id_ed25519
+└── id_ed25519.pub
+
+# Embedding-Modell: nomic-embed-text download
+docker exec -it ollama ollama pull nomic-embed-text
+
+docker exec -it ollama ollama list
+NAME                       ID              SIZE      MODIFIED    
+nomic-embed-text:latest    0a109f422b47    274 MB    9 hours ago    
+qwen3:1.7b                 8f68893c685c    1.4 GB    9 hours ago
+        
+# Demo Prompt
+docker exec -it ollama ollama run qwen3:1.7b
+
+>>> Explain Retrieval-Augmented Generation (RAG) in three simple sentences.
+Thinking...
+Okay, the user wants an explanation of Retrieval-Augmented Generation (RAG) in three simple sentences. Let me start by recalling what I know about RAG.
+
+RAG is a method that combines retrieval and generation. So the first sentence should mention that it integrates these two processes. Maybe something like "RAG combines retrieval and 
+generation to enhance model performance."
+
+/bye
+oder
+STRG + D
+
+# Embeddings anzeigen lassen
+curl http://localhost:11434/api/embed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "nomic-embed-text",
+    "input": "Retrieval-Augmented Generation combines search and language models."
+  }'
+
+# {"model":"nomic-embed-text","embeddings":[[-0.039704673,0.05522008,-0.15519351,-0.06407194,0.05340631,0.0034495962,
