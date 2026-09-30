@@ -2,7 +2,7 @@
 
 <p><img src="../images/rag.jpg" width="50%" height="50%" /></p>
 
-<img src="https://img.shields.io/badge/OpenAI-0081A5?style=flat&logo=openaigym&labelColor=ffffff&logoColor=0081A5" /> <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&labelColor=ffffff&logoColor=3776AB" /> <img src="https://img.shields.io/badge/Retrieval%20Augmented%20Generation%20(RAG)-11397E?style=flat&logo=openaigym&labelColor=ffffff&logoColor=11397E" /> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&labelColor=ffffff&logoColor=2496ED" /> <img src="https://img.shields.io/badge/Qdrant-DC244C?style=flat&logo=qdrant&labelColor=ffffff&logoColor=DC244C" />
+<img src="https://img.shields.io/badge/OpenAI-0081A5?style=flat&logo=openaigym&labelColor=ffffff&logoColor=0081A5" /> <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&labelColor=ffffff&logoColor=3776AB" /> <img src="https://img.shields.io/badge/Retrieval%20Augmented%20Generation%20(RAG)-11397E?style=flat&logo=openaigym&labelColor=ffffff&logoColor=11397E" /> <img src="https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&labelColor=ffffff&logoColor=2496ED" /> <img src="https://img.shields.io/badge/Qdrant-DC244C?style=flat&logo=qdrant&labelColor=ffffff&logoColor=DC244C" />
 
 Dieses Projekt dient als Laborumgebung, um die Funktionsweise einer
 Retrieval Augmented Generation (RAG) Pipeline Schritt für Schritt
