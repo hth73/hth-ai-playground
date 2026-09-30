@@ -1,4 +1,4 @@
-# Local RAG chatbot for document based question answering, powered by Ollama, Qdrant and Streamlit.
+# Lokaler RAG Chatbot - basierend auf Ollama, Qdrant, SQLite und Streamlit.
 
 <p><img src="../images/local_rag_chatbot.jpg" width="50%" height="50%" /></p>
 
