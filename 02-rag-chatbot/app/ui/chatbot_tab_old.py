@@ -107,48 +107,21 @@ def _render_document_sidebar() -> None:
         st.subheader("Knowledge base")
 
         documents, indexed_count, total_chunks = _get_document_state()
+        st.metric("Indexed documents", indexed_count)
+        st.metric("Indexed chunks", total_chunks)
 
-        metric_col1, metric_col2 = st.columns(2)
-        with metric_col1:
-            st.metric("Documents", indexed_count)
-        with metric_col2:
-            st.metric("Chunks", total_chunks)
-
-        indexed_documents = [
-            document for document in documents
-            if document.get("status") == "indexed"
-        ]
-        other_documents = [
-            document for document in documents
-            if document.get("status") != "indexed"
-        ]
-
-        with st.expander(
-            f"📚 Indexed documents ({len(indexed_documents)})",
-            expanded=False,
-        ):
-            if indexed_documents:
-                for document in indexed_documents:
-                    with st.container(border=True):
-                        st.markdown(f"**{document['filename']}**")
-                        st.caption(
-                            f"🟢 Indexed · {document['chunk_count']} chunk(s)"
-                        )
-            else:
-                st.caption("No indexed documents yet.")
-
-        if other_documents:
-            with st.expander(
-                f"⏳ Other documents ({len(other_documents)})",
-                expanded=False,
-            ):
-                for document in other_documents:
-                    with st.container(border=True):
-                        st.markdown(f"**{document['filename']}**")
-                        st.caption(
-                            f"🟠 {document['status'].capitalize()} · "
-                            f"{document['chunk_count']} chunk(s)"
-                        )
+        if documents:
+            for document in documents:
+                status = document["status"]
+                icon = "🟢" if status == "indexed" else "🟠"
+                with st.container(border=True):
+                    st.markdown(f"**{document['filename']}**")
+                    st.caption(
+                        f"{icon} {status.capitalize()} · "
+                        f"{document['chunk_count']} chunk(s)"
+                    )
+        else:
+            st.info("No documents uploaded yet.")
 
 
 def show_chatbot_tab():
@@ -162,49 +135,6 @@ def show_chatbot_tab():
     if "indexing_debug" not in st.session_state:
         st.session_state.indexing_debug = None
 
-    # Keep the chat input fixed at the bottom while the conversation scrolls.
-    # Since this chat is rendered inside a Streamlit tab, apply positioning
-    # explicitly instead of relying on the default chat-input placement.
-    st.markdown(
-        """
-        <style>
-        div[data-testid="stChatInput"] {
-            position: fixed;
-            bottom: 1rem;
-            left: 22rem;
-            right: 2rem;
-            z-index: 999;
-            background: var(--background-color);
-            padding-top: 0.5rem;
-        }
-
-        /* Prevent the fixed input from covering the last chat message. */
-        div[data-testid="stMainBlockContainer"] {
-            padding-bottom: 6rem;
-        }
-
-        @media (max-width: 900px) {
-            div[data-testid="stChatInput"] {
-                left: 1rem;
-                right: 1rem;
-            }
-        }
-
-        /* Compact knowledge-base metrics in the sidebar. */
-        section[data-testid="stSidebar"] [data-testid="stMetric"] {
-            padding: 0.15rem 0;
-        }
-        section[data-testid="stSidebar"] [data-testid="stMetricLabel"] {
-            font-size: 0.72rem;
-        }
-        section[data-testid="stSidebar"] [data-testid="stMetricValue"] {
-            font-size: 1.35rem;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
     _, indexed_count, total_chunks = _get_document_state()
     has_indexed_documents = indexed_count > 0
 
@@ -214,6 +144,13 @@ def show_chatbot_tab():
     title_column, action_column = st.columns([5, 1])
     with title_column:
         st.subheader("💬 Chat")
+        if has_indexed_documents:
+            st.caption(
+                f"🟢 Knowledge base ready · {indexed_count} document(s) · "
+                f"{total_chunks} indexed chunk(s)"
+            )
+        else:
+            st.caption("Upload and index documents from the sidebar to begin.")
 
     with action_column:
         # Keep the control enabled even for an empty conversation, so it
@@ -232,7 +169,12 @@ def show_chatbot_tab():
 
     st.divider()
 
-    if not has_indexed_documents:
+    if not st.session_state.chat_history and has_indexed_documents:
+        st.markdown(
+            "Ask a question about your indexed documents. "
+            "Retrieved source chunks are available below each answer."
+        )
+    elif not has_indexed_documents:
         st.info(
             "Your knowledge base is empty. Upload a PDF, TXT, or Markdown "
             "document using the left sidebar."

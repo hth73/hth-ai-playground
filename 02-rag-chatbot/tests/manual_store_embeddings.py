@@ -58,6 +58,12 @@ all_vectors = embed_documents(all_chunks)
 
 print(f"Embeddings generated: {len(all_vectors)}")
 
+# Prüfen, ob für jeden Chunk ein Embedding existiert
+assert len(all_vectors) == len(all_chunks), (
+    f"Erwartet: {len(all_chunks)} Embeddings, "
+    f"erzeugt: {len(all_vectors)}"
+)
+
 # --------------------------------------------------
 # 4. Verbindung zu Qdrant herstellen
 # --------------------------------------------------
@@ -74,6 +80,14 @@ print("Qdrant connection successful!")
 # --------------------------------------------------
 print("\nStoring data in Qdrant...")
 
+# Aktuellen Bestand vor dem Speichern ermitteln
+collection_info = client.get_collection(
+    collection_name=QDRANT_COLLECTION
+)
+
+points_before = collection_info.points_count
+
+# Chunks und Embeddings speichern
 stored_points = store_embeddings(
     client=client,
     chunks=all_chunks,
@@ -81,19 +95,46 @@ stored_points = store_embeddings(
     metadata=all_metadata,
 )
 
-print(f"{stored_points} Points successfully stored!")
+# Aktuellen Bestand nach dem Speichern ermitteln
+collection_info = client.get_collection(
+    collection_name=QDRANT_COLLECTION
+)
+
+points_after = collection_info.points_count
+
+print(f"Points before: {points_before}")
+print(f"Points after: {points_after}")
+print(f"Points processed: {stored_points}")
+
+# Prüfen, ob die erwartete Anzahl an Points verarbeitet wurde
+assert stored_points == len(all_chunks), (
+    f"Erwartet: {len(all_chunks)} Points, "
+    f"verarbeitet: {stored_points}"
+)
+
+# Prüfen, ob die Collection die erwartete Anzahl enthält
+assert points_after >= len(all_chunks), (
+    f"Die Collection enthält nur {points_after} Points, "
+    f"erwartet werden mindestens {len(all_chunks)}"
+)
+
+print("Storage check passed!")
 
 # --------------------------------------------------
 # 6. Gespeicherte Daten überprüfen
 # --------------------------------------------------
-collection_info = client.get_collection(QDRANT_COLLECTION)
+collection_info = client.get_collection(
+    collection_name=QDRANT_COLLECTION
+)
 
 print("\nQdrant collection information:")
 print(f"Collection: {QDRANT_COLLECTION}")
 print(f"Points in collection: {collection_info.points_count}")
 
-# Prüfen, ob alle Points gespeichert wurden
-assert collection_info.points_count == len(all_chunks)
+# Prüfen, ob die Collection Points enthält
+assert collection_info.points_count > 0, (
+    "Die Qdrant-Collection enthält keine Points!"
+)
 
 print("Point count check passed!")
 
@@ -109,9 +150,11 @@ points, next_offset = client.scroll(
 
 print(f"\nRetrieved points: {len(points)}")
 
+# Prüfen, ob Points zurückgelesen wurden
+assert len(points) > 0, "Es konnten keine Points aus Qdrant gelesen werden!"
+
 # Ersten Point anzeigen
 if points:
-
     first_point = points[0]
 
     print("\n--- First stored point ---")
@@ -130,5 +173,7 @@ if points:
 
     print("\nVector dimension check passed!")
 
-
+# --------------------------------------------------
+# 8. Ergebnis
+# --------------------------------------------------
 print("\nAll storage checks passed!")

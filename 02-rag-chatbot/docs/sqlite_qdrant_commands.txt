@@ -1,0 +1,47 @@
+sqlite3 data/metadata.db
+# SQLite version 3.45.1 2024-01-30 16:01:20
+# Enter ".help" for usage hints.
+
+sqlite> .tables
+# documents
+
+sqlite> .schema documents
+# CREATE TABLE documents (
+#                 document_id TEXT PRIMARY KEY,
+#                 filename TEXT NOT NULL,
+#                 stored_path TEXT NOT NULL,
+#                 file_hash TEXT NOT NULL UNIQUE,
+#                 file_size INTEGER NOT NULL,
+#                 file_type TEXT NOT NULL,
+#                 status TEXT NOT NULL DEFAULT 'uploaded'
+#                     CHECK (
+#                         status IN (
+#                             'uploaded',
+#                             'indexed',
+#                             'failed'
+#                         )
+#                     ),
+#                 chunk_count INTEGER NOT NULL DEFAULT 0,
+#                 created_at TEXT NOT NULL,
+#                 indexed_at TEXT
+#             );
+sqlite> .quit
+
+sqlite> SELECT
+    document_id,
+    filename,
+    status,
+    chunk_count,
+    created_at,
+    indexed_at
+FROM documents
+WHERE filename = 'coreos_basics.txt';
+
+# aab6ecc4-c8b7-45cf-ad8b-24e6583bee5b|coreos_basics.txt|indexed|8|2026-09-30T14:17:15.432640+00:00|2026-09-30T14:17:17.391231+00:00
+
+# ---
+
+# Qdrant Dashboard
+http://localhost:6333/dashboard#/collections
+# http://localhost:8501/ (Streamlit - Chatbot Debug Chunk ID suchen und in Qdrant vergleichen)
+id:ebeb92d8-7bfe-4723-87f1-cb85d356a520

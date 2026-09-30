@@ -6,7 +6,7 @@ from rag.m04_vector_store import (
     QDRANT_COLLECTION,
 )
 
-from app.rag.m05_retriever import retrieve_chunks
+from rag.m05_retriever import retrieve_chunks
 
 # --------------------------------------------------
 # 1. Verbindung zu Qdrant herstellen
